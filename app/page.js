@@ -6,35 +6,34 @@ function binoutHelper(num, left) {
     return binoutHelper(num >> 1, left - 1) + (num & 1);
 }
 
-function binout(num) {
-    return binoutHelper(num, 8);
+function binout(num, bits) {
+    return binoutHelper(num, bits);
 }
 
 function restoringDivision(dividend, divisor) {
     let A = 0;
     let Q = dividend;
     let M = divisor;
+    let maxBits = Math.max(dividend.toString(2).length, divisor.toString(2).length);
     let steps = [];
 
-    steps.push({ N: 8, M: binout(M), A: binout(A), Q: binout(Q), Operation: "Populate Data" });
-
-    for (let i = 7; i >= 0; i--) {
-        let AQ = (A << 8) + Q;
+    for (let i = maxBits - 1; i >= 0; i--) {
+        let AQ = (A << maxBits) + Q;
         AQ <<= 1;
-        A = (AQ >> 8) & 0xFF;
-        Q = AQ & 0xFF;
-        steps.push({ N: i, M: binout(M), A: binout(A), Q: binout(Q) + "_", Operation: "Shift Left" });
+        A = (AQ >> maxBits) & ((1 << maxBits) - 1);
+        Q = AQ & ((1 << maxBits) - 1);
+        steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits) + "_", Operation: "Shift Left" });
 
         A -= M;
-        steps.push({ N: i, M: binout(M), A: binout(A), Q: binout(Q) + "_", Operation: "A = A - M" });
+        steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits) + "_", Operation: "A = A - M" });
 
-        if (A & (1 << 7)) {
+        if (A & (1 << (maxBits - 1))) {
             Q &= ~1;
             A += M;
-            steps.push({ N: i, M: binout(M), A: binout(A), Q: binout(Q), Operation: `Q[1] = 0` });
+            steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits), Operation: `Q[1] = 0` });
         } else {
             Q |= 1;
-            steps.push({ N: i, M: binout(M), A: binout(A), Q: binout(Q), Operation: "Q = Q[1] + 1" });
+            steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits), Operation: "Q = Q[1] + 1" });
         }
     }
     return steps;
@@ -44,7 +43,7 @@ export default function Home() {
     const [steps, setSteps] = useState([]);
 
     const handleCalculate = () => {
-        setSteps(restoringDivision(8, 3));
+        setSteps(restoringDivision(5, 2));
     };
 
     return (
