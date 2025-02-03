@@ -1,109 +1,38 @@
-// utils/algorithm.js
 
-// Function to add two binary numbers
-export function add(A, M) {
-  let carry = 0;
-  let Sum = '';
-  for (var i = A.length - 1; i >= 0; i--) {
-    let temp = (A[i]) + parseInt(M[i]) + carry;
-    if (temp >= 1) {
-      Sum += String(temp % 2);
-      carry = 1;
-    } else {
-      Sum += String(temp);
-      carry = 0;
-    }
-  }
-  return Sum.charAt(Sum.length - 1);
+export function binoutHelper(num, left) {
+  if (left === 0) return "";
+  return binoutHelper(num >> 1, left - 1) + (num & 1);
 }
 
-// Function to find the complement of the given binary number
-export function complement(m) {
-  let M = '';
-  for (var i = 0; i < m.length; i++) {
-    M += String((parseInt(m[i]) + 1) % 2);
-  }
-  M = add(M, '0001');
-  return M;
+export function binout(num, bits) {
+  return binoutHelper(num, bits);
 }
 
-// Function to convert decimal to binary with padding to fit the divisor's bit length
-export function decimalToBinary(num, length) {
-  let binary = (num >>> 0).toString(2);
-  return binary.padStart(length, '0');  // Pad the binary number to fit the length
-}
+export function restoringDivision(dividend, divisor) {
+  let A = 0;
+  let Q = dividend;
+  let M = divisor;
+  let maxBits = Math.max(dividend.toString(2).length, divisor.toString(2).length);
+  let steps = [];
 
-// Function to find the quotient and remainder using the Restoring Division Algorithm
-export function restoringDivision(Q, M, A, steps) {
-  let count = steps; // Limit steps to the number of bits in the divisor
-  const resultSteps = []; // To store the steps
-  let operation = '';
+  for (let i = maxBits - 1; i >= 0; i--) {
+      let AQ = (A << maxBits) + Q;
+      AQ <<= 1;
+      A = (AQ >> maxBits) & ((1 << maxBits) - 1);
+      Q = AQ & ((1 << maxBits) - 1);
+      steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits) + "_", Operation: "Shift Left" });
 
-  // Save initial step
-  resultSteps.push({
-    N: count,
-    M: M,
-    A: A,
-    Q: Q,
-    operation: 'Populate Data'
-  });
+      A -= M;
+      steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits) + "_", Operation: "A = A - M" });
 
-  while (count > 0) {
-    // Save step before shifting
-    resultSteps.push({
-      N: count,
-      M: M,
-      A: A,
-      Q: Q,
-      operation: 'Shift Left'
-    });
-
-    // Step 1: Left Shift, assign LSB of Q to MSB of A
-    A = A[1] + Q[0];
-
-    // Step 2: A - M
-    let comp_M = complement(M);
-    A = add(A, comp_M);
-    operation = 'A = A - M';
-
-    // Save the step after subtraction
-    resultSteps.push({
-      N: count - 1,
-      M: M,
-      A: A,
-      Q: Q,
-      operation: operation
-    });
-
-    // Check if A[0] is 1 (unsuccessful)
-    if (A[0] == '1') {
-      Q = Q[1] + '0'; // Q[1] + 0
-      operation = 'Q[1] = 0'; // Unsuccessful operation
-      A = add(A, M); // Restoration of A
-      resultSteps.push({
-        N: count - 1,
-        M: M,
-        A: A,
-        Q: Q,
-        operation: 'A = A + M (Restoration)'
-      });
-    } else {
-      Q = Q[1] + '1'; // Q[1] + 1
-      operation = 'Q[1] = 1'; // Successful operation
-    }
-
-    // Save final step
-    resultSteps.push({
-      N: count - 1,
-      M: M,
-      A: A,
-      Q: Q,
-      operation: operation
-    });
-
-    count -= 1;
+      if (A & (1 << (maxBits - 1))) {
+          Q &= ~1;
+          A += M;
+          steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits), Operation: `Q[1] = 0` });
+      } else {
+          Q |= 1;
+          steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits), Operation: "Q = Q[1] + 1" });
+      }
   }
-
-  // Return all the steps
-  return resultSteps;
+  return steps;
 }

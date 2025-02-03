@@ -1,77 +1,67 @@
 "use client";
+import { restoringDivision } from "@/utils/algorithm";
 import { useState } from "react";
 
-function binoutHelper(num, left) {
-    if (left === 0) return "";
-    return binoutHelper(num >> 1, left - 1) + (num & 1);
-}
-
-function binout(num, bits) {
-    return binoutHelper(num, bits);
-}
-
-function restoringDivision(dividend, divisor) {
-    let A = 0;
-    let Q = dividend;
-    let M = divisor;
-    let maxBits = Math.max(dividend.toString(2).length, divisor.toString(2).length);
-    let steps = [];
-
-    for (let i = maxBits - 1; i >= 0; i--) {
-        let AQ = (A << maxBits) + Q;
-        AQ <<= 1;
-        A = (AQ >> maxBits) & ((1 << maxBits) - 1);
-        Q = AQ & ((1 << maxBits) - 1);
-        steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits) + "_", Operation: "Shift Left" });
-
-        A -= M;
-        steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits) + "_", Operation: "A = A - M" });
-
-        if (A & (1 << (maxBits - 1))) {
-            Q &= ~1;
-            A += M;
-            steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits), Operation: `Q[1] = 0` });
-        } else {
-            Q |= 1;
-            steps.push({ N: i, M: binout(M, maxBits), A: binout(A, maxBits), Q: binout(Q, maxBits), Operation: "Q = Q[1] + 1" });
-        }
-    }
-    return steps;
-}
 
 export default function Home() {
+    const [dividend, setDividend] = useState(0);
+    const [divisor, setDivisor] = useState(1);
     const [steps, setSteps] = useState([]);
 
     const handleCalculate = () => {
-        setSteps(restoringDivision(5, 2));
+        if (divisor === 0) {
+            alert("Divisor cannot be zero");
+            return;
+        }
+        setSteps(restoringDivision(parseInt(dividend), parseInt(divisor)));
     };
 
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Restoring Division Algorithm</h1>
-            <button onClick={handleCalculate} className="bg-blue-500 text-white px-4 py-2 mb-4">Calculate</button>
-            <table className="table-auto w-full border-collapse border border-gray-400">
-                <thead>
-                    <tr>
-                        <th className="border border-gray-400 px-2 py-1">N</th>
-                        <th className="border border-gray-400 px-2 py-1">M</th>
-                        <th className="border border-gray-400 px-2 py-1">A</th>
-                        <th className="border border-gray-400 px-2 py-1">Q</th>
-                        <th className="border border-gray-400 px-2 py-1">Operation</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {steps.map((step, index) => (
-                        <tr key={index}>
-                            <td className="border border-gray-400 px-2 py-1">{step.N}</td>
-                            <td className="border border-gray-400 px-2 py-1">{step.M}</td>
-                            <td className="border border-gray-400 px-2 py-1">{step.A}</td>
-                            <td className="border border-gray-400 px-2 py-1">{step.Q}</td>
-                            <td className="border border-gray-400 px-2 py-1">{step.Operation}</td>
+        <div className="p-6 max-w-4xl mx-auto bg-white shadow-md rounded-lg">
+            <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Restoring Division Algorithm</h1>
+            <div className="mb-4">
+                <input
+                    type="number"
+                    className="w-full p-2 border rounded-lg mb-2"
+                    placeholder="Enter Dividend"
+                    value={dividend}
+                    onChange={(e) => setDividend(e.target.value)}
+                />
+                <input
+                    type="number"
+                    className="w-full p-2 border rounded-lg"
+                    placeholder="Enter Divisor"
+                    value={divisor}
+                    onChange={(e) => setDivisor(e.target.value)}
+                />
+            </div>
+            <button onClick={handleCalculate} className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300 w-full mb-6">
+                Calculate
+            </button>
+            <div className="overflow-x-auto">
+                <table className="w-full border-collapse border border-gray-300">
+                    <thead className="bg-gray-100">
+                        <tr>
+                            <th className="border border-gray-300 px-4 py-2">N</th>
+                            <th className="border border-gray-300 px-4 py-2">M</th>
+                            <th className="border border-gray-300 px-4 py-2">A</th>
+                            <th className="border border-gray-300 px-4 py-2">Q</th>
+                            <th className="border border-gray-300 px-4 py-2">Operation</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {steps.map((step, index) => (
+                            <tr key={index} className="text-center odd:bg-white even:bg-gray-50">
+                                <td className="border border-gray-300 px-4 py-2">{step.N}</td>
+                                <td className="border border-gray-300 px-4 py-2">{step.M}</td>
+                                <td className="border border-gray-300 px-4 py-2">{step.A}</td>
+                                <td className="border border-gray-300 px-4 py-2">{step.Q}</td>
+                                <td className="border border-gray-300 px-4 py-2">{step.Operation}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }
