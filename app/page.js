@@ -20,7 +20,7 @@ export default function Home() {
     };
 
     return (
-        <div className="p-8 max-w-4xl mx-auto bg-blue-950 shadow-lg rounded-lg">
+        <div className="p-8 my-4 max-w-4xl mx-auto bg-blue-950 shadow-lg rounded-lg">
             <h1 className="text-4xl font-bold text-center text-white mb-8">
                 Restoring Division Algorithm
             </h1>
