@@ -63,11 +63,11 @@ export default function Home() {
                 <table className="w-full table-auto">
                     <thead className="bg-gray-100 text-gray-800">
                         <tr>
-                            <th className="px-6 py-4 text-left">N</th>
-                            <th className="px-6 py-4 text-left">M</th>
-                            <th className="px-6 py-4 text-left">A</th>
-                            <th className="px-6 py-4 text-left">Q</th>
-                            <th className="px-6 py-4 text-left">Operation</th>
+                            <th className="px-6 py-4">N</th>
+                            <th className="px-6 py-4">M</th>
+                            <th className="px-6 py-4">A</th>
+                            <th className="px-6 py-4">Q</th>
+                            <th className="px-6 py-4">Operation</th>
                         </tr>
                     </thead>
 
