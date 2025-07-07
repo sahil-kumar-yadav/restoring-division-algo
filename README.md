@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🧮 Restoring Division Visualizer
 
-## Getting Started
+An animated educational web app built with **React**, **Framer Motion**, and **Tailwind CSS** that visually demonstrates the **Restoring Division Algorithm** step-by-step for two integers.
 
-First, run the development server:
+![restoring-demo](https://via.placeholder.com/1000x300?text=Insert+Restoring+Division+Screenshot+or+GIF)
+
+---
+
+## ✨ Features
+
+* 🔢 **Binary Division Visualized**: Watch the restoring division process unfold in real-time.
+* 🧾 **Detailed Steps Table**: Displays all registers and operations clearly.
+* 🎞️ **Smooth Animations**: Powered by Framer Motion for an intuitive experience.
+* 🧠 **Educational Focus**: Ideal for students and teachers learning or explaining binary division algorithms.
+
+---
+
+## 🚀 Live Demo
+
+> [🔗 Try the App Live](#)
+> *(Replace with your deployed URL)*
+
+---
+
+## 📷 Preview
+
+![restoring-preview](https://via.placeholder.com/1000x600?text=Add+GIF+or+Screenshot+of+your+UI)
+
+---
+
+## ⚙️ How It Works
+
+The **Restoring Division Algorithm** is used to divide binary numbers using a method that restores the accumulator register to its original value if subtraction causes a negative result.
+
+### Registers Tracked:
+
+* **A** – Accumulator
+* **Q** – Quotient Register
+* **M** – Divisor Register
+
+### Core Steps:
+
+1. Left shift A and Q
+2. Subtract M from A
+3. Set quotient bit depending on sign of A
+4. Restore A if subtraction was negative
+
+Each iteration is animated and visualized in a clean, interactive table.
+
+---
+
+## 🧪 Tech Stack
+
+* ⚛️ **React** – Frontend framework
+* 💅 **Tailwind CSS** – For responsive UI and styling
+* 🎞 **Framer Motion** – Beautiful transitions and animations
+* 🧮 **Custom JS Algorithm** – Restoring Division logic
+
+---
+
+## 💡 Educational Use
+
+This tool is designed for:
+
+* 📘 CS students learning binary division
+* 👨‍🏫 Instructors giving visual demos
+* 🔍 Developers curious about low-level operations
+
+---
+
+## 🛠️ Getting Started
+
+### 🔧 Local Setup
 
 ```bash
+# Clone the repo
+git clone https://github.com/your-username/restoring-division.git
+
+# Navigate into the project directory
+cd restoring-division
+
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open your browser and go to `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📁 Project Structure
 
-## Learn More
+```
+├── app/
+│   ├── page.tsx           # Main component
+│   └── utils/
+│       └── algorithm.js   # Restoring division logic
+├── public/
+│   └── assets/            # Screenshots or GIFs
+├── styles/
+│   └── globals.css
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Contributions are welcome!
+Please open an issue or submit a pull request with improvements or bug fixes.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📜 License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 👨‍💻 Author
+
+**Your Name**
+🔗 [GitHub](https://github.com/your-username)
+🔗 [LinkedIn](https://linkedin.com/in/your-profile)
+
+---
